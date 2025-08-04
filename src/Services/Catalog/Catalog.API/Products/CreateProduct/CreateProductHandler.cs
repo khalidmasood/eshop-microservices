@@ -11,7 +11,7 @@ namespace Catalog.API.Products.CreateProduct
         : ICommand<CreateProductResult>;
 
     //Create result data object
-    public record CreateProductResult(Guid id);
+    public record CreateProductResult(Guid Id);
 
     //In order to trigger this command handler, this needs to implemet the interface IRequestHandler<CreateProductCommand, CreateProductResult>
     internal class CreateProductCommandHandler(IDocumentSession session) : ICommandHandler<CreateProductCommand, CreateProductResult>
@@ -39,7 +39,7 @@ namespace Catalog.API.Products.CreateProduct
 
             //3) return CreateProductResult result
 
-            return new CreateProductResult(Guid.NewGuid());
+            return new CreateProductResult(product.Id);
         }
     }
 }
