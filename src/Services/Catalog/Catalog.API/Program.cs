@@ -1,4 +1,9 @@
+using BuildingBlocks.Behaviors;
+using FluentValidation;
 using System.Runtime.InteropServices;
+
+
+var myPrgramAssembly = typeof(Program).Assembly;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,10 +17,13 @@ builder.Services.AddCarter();
 builder.Services.AddMediatR(config =>
 {
 
-    config.RegisterServicesFromAssemblies(typeof(Program).Assembly);
+    config.RegisterServicesFromAssemblies(myPrgramAssembly);
+    config.AddOpenBehavior(typeof(ValidationBehaviors<,>)); // Register any generic one into MediatoR
 
 });
 
+//Add fluent validators
+builder.Services.AddValidatorsFromAssembly(myPrgramAssembly);
 
 
 //Add Marten and configure the database connection using the app settings
