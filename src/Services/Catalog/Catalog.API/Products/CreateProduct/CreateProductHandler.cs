@@ -25,15 +25,11 @@ namespace Catalog.API.Products.CreateProduct
     }
 
     //In order to trigger this command handler, this needs to implemet the interface IRequestHandler<CreateProductCommand, CreateProductResult>
-    internal class CreateProductCommandHandler(IDocumentSession session, ILogger<CreateProductCommandHandler> logger) 
+    internal class CreateProductCommandHandler(IDocumentSession session) 
         : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
         public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
-
-            logger.LogInformation("CreateProductCommandHandler.Handle called with {@Command}", command);
-
-
             //Business logic to create a product
 
             //1) create product entity from command object
