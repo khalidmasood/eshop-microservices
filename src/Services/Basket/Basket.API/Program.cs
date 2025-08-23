@@ -21,6 +21,16 @@ builder.Services.AddMediatR(config =>
     config.AddOpenBehavior(typeof(LoggingBehavior<,>)); // Register any generic one into MediatoR for Logging, ensures that the logging is applied to every MediatR request
 });
 
+//Add Marten and configure the database connection using the app settings to use PostgreSQL
+builder.Services.AddMarten(opts =>
+{
+    opts.Connection(builder.Configuration.GetConnectionString("Database")!);
+    opts.Schema.For<ShoppingCart>().Identity(x => x.UserName); // so we configured the identity field for ShoppingCart to username in the function expression
+}).UseLightweightSessions();//and use the Marten's lightweigh session mode to optimize performance
+
+
+
+
 var app = builder.Build();
 
 
