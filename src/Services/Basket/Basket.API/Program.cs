@@ -1,3 +1,4 @@
+using HealthChecks.UI.Client;
 
 var myPrgramAssembly = typeof(Program).Assembly;
 
@@ -28,16 +29,33 @@ builder.Services.AddMarten(opts =>
     opts.Schema.For<ShoppingCart>().Identity(x => x.UserName); // so we configured the identity field for ShoppingCart to username in the function expression
 }).UseLightweightSessions();//and use the Marten's lightweigh session mode to optimize performance
 
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
 
+builder.Services.AddStackExchangeRedisCache(options => 
+    options.Configuration = builder.Configuration.GetConnectionString("Redis")
+);
+
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("Database")!)
+    .AddRedis(builder.Configuration.GetConnectionString("Redis")!);
 
 var app = builder.Build();
-
 
 // After Building the Application:
 // Configure HTTP request pipline. Apply Use function or Map function methods in order to configure the HTTP request lifecycle.
 
 app.MapCarter();//it maps the routes defined in the ICarterModule implementation
+
+app.UseExceptionHandler(options => { });
+app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions { 
+
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
 
 
 

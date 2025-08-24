@@ -13,7 +13,7 @@ public class StoreBasketCommandValidator : AbstractValidator<StoreBasketCommand>
     }
 }
 
-public class StoreBasketCommandHandler//(IBasketRepository repository, DiscountProtoService.DiscountProtoServiceClient discountProto)
+public class StoreBasketCommandHandler(IBasketRepository repository)//, DiscountProtoService.DiscountProtoServiceClient discountProto)
     : ICommandHandler<StoreBasketCommand, StoreBasketResult>
 {
     public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
@@ -23,8 +23,7 @@ public class StoreBasketCommandHandler//(IBasketRepository repository, DiscountP
 
         ShoppingCart cart = command.Cart;
 
-        //TODO: store the basket in database and update the cache
-        //await repository.StoreBasket(command.Cart, cancellationToken);
+        await repository.StoreBasket(command.Cart, cancellationToken);
 
         return new StoreBasketResult("UserName");
     }
