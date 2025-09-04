@@ -1,0 +1,48 @@
+﻿syntax = "proto3";//tells the protobuf compiler what syntax we will use? for protobuf versions
+
+//define namespace with options keyword
+option csharp_namespace = "Discount.Grpc"; //optional, tells csharp compiler to generate classes within the specified namespace.
+package discount;
+
+//The discount service definition.
+service DiscountProtoService {
+	//Discount CRUD Operations - 4 RPC methods here
+	rpc GetDiscount (GetDiscountRequest) returns (CouponModel);
+	rpc CreateDiscount (CreateDiscountRequest) returns (CouponModel);
+	rpc UpdateDiscount (UpdateDiscountRequest) returns (CouponModel);
+	rpc DeleteDiscount (DeleteDiscountRequest) returns (DeleteDiscountResponse);
+}
+
+//Define these Request and Response methods after the service definition with required parameters.
+message GetDiscountRequest {
+	string productName = 1;//this requires only product name parameter, and this is how we define it.
+}
+
+//and define the CouponModel which is a generic respons emodel
+message CouponModel {
+	int32 id = 1;
+	string productName = 2;
+	string description = 3;
+	int32 amount = 4;
+}
+
+//and define the other Request objects with required parameters.
+
+message CreateDiscountRequest {
+	string coupon = 1;//paramter
+}
+
+message UpdateDiscountRequest {
+	string coupon = 1;
+}
+
+message DeleteDiscountRequest {
+	string productName = 1;
+}
+
+message DeleteDiscountResponse {
+	string success = 1;
+}
+
+
+
